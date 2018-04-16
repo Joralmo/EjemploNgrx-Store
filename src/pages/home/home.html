@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Posts
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button (tap)="agregarPost()">
+        <ion-icon name="md-add"></ion-icon>
+      </button>
+      <button ion-button (tap)="resetearPost()">
+        <ion-icon name="md-refresh"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label>Titulo</ion-label>
+      <ion-input [(ngModel)]="p.titulo" placeholder="Titulo del post"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Descripción</ion-label>
+      <ion-textarea [(ngModel)]="p.descripcion" placeholder="Descripción del post"></ion-textarea>
+    </ion-item>
+    <ion-list-header>Posts</ion-list-header>
+    <button ion-item *ngFor="let post of posts | async" (tap)="removerPost(post)">
+      <h2>{{post.titulo}}</h2>
+      <p>{{post.descripcion}}</p>
+    </button>
+  </ion-list>
+</ion-content>
