@@ -2,23 +2,25 @@ import * as Acciones from '../acciones/postAcciones';
 
 export type Accion = Acciones.Todo;
 
-export interface Post{
-    id:String;
-    titulo:String;
-    descripcion:String;
+export interface Tienda{
+    codigo:String;
+    negocio:String;
+    direccion:String;
+    barrio:String;
+    estado:Number;
 }
 
 export interface Estado{
-    posts: [Post];
+    tiendas: [Tienda];
 }
 
-export function postReducer(estado=[], accion){
+export function tiendaReducer(estado=[], accion){
     switch(accion.type){
         case Acciones.AGREGAR:
             return[...estado, ...accion.datos];
         
         case Acciones.BORRAR:
-            return estado.filter(post => post.id != accion.datos.id);
+            return estado.filter(tienda => tienda.codigo != accion.datos.codigo);
         
         case Acciones.RESETEAR:
             return [];

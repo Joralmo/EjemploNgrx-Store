@@ -4,9 +4,10 @@ import { NavController } from 'ionic-angular';
 
 import { Store } from '@ngrx/store';
 import * as Acciones from './../../acciones/postAcciones';
-import { Estado } from './../../reducers/postReducer';
+import { Estado } from './../../reducers/tiendaReducer';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import { ApiProvider } from '../../providers/api/api';
 
 @Component({
   selector: 'page-home',
@@ -14,46 +15,64 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class HomePage {
 
+  private url = 'https://my-json-server.typicode.com/joralmo/demo/tiendas';
+
   i:any=0;
 
-  p:any = {
-    titulo:"Post0",
-    descripcion:"SoyUnPost"
+  t:any = {
+    negocio:"",
+    codigo:"",
+    direccion:"",
+    barrio:"",
+    estado:0
   };
 
-  posts: Observable<any>;
+  tiendas: Observable<any>;
 
   subs:Subscription;
 
-  constructor(public navCtrl: NavController, private store:Store<Estado>, public splashScreen: SplashScreen) {
-    this.posts = store.select<any>("posts")
+  constructor(public navCtrl: NavController, private store:Store<Estado>, 
+              public splashScreen: SplashScreen, private apiProvider:ApiProvider) {
+    this.tiendas = store.select<any>("tiendas")
   }
 
   ionViewDidLoad(){
     this.splashScreen.hide();
+    this.getTiendas();
   }
 
-  agregarPost(){
-    let id = Math.random().toString(36).substr(2, 10);
+  getTiendas(){
+    this.apiProvider.get(this.url)
+      .subscribe(tiendas => {
+        for(let tienda of tiendas ){
+          this.t = tienda;
+          this.agregarTienda();
+        }
+      });
+  }
+
+  agregarTienda(){
     this.store.dispatch(
       new Acciones.Agregar({
-        id:id,
-        titulo:this.p.titulo,
-        descripcion:this.p.descripcion
+        codigo:this.t.codigo,
+        negocio:this.t.negocio,
+        direccion:this.t.direccion,
+        barrio:this.t.barrio,
+        estado:this.t.estado
       })
     );
-    this.p.titulo=`Post${++this.i}`;
   }
 
-  removerPost(post){
+  removerTienda(tienda){
+    console.log(tienda.codigo)
     this.store.dispatch(
       new Acciones.Borrar({
-        id:post.id
+        codigo:tienda.codigo
       })
     );
   }
 
-  resetearPost(){
+  resetearTiendas(){
     this.store.dispatch(
       new Acciones.Resetear({
 

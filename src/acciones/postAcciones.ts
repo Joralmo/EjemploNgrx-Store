@@ -1,4 +1,4 @@
-import { Post } from './../reducers/postReducer';
+import { Tienda } from './../reducers/tiendaReducer';
 import { Action } from '@ngrx/store';
 
 export const AGREGAR = "AGREGAR";
@@ -7,7 +7,7 @@ export const RESETEAR = "RESETEAR";
 
 export class Agregar implements Action{
     readonly type = AGREGAR;
-    constructor(public datos:Post){}
+    constructor(public datos:Tienda){}
 }
 
 export class Borrar implements Action{
